@@ -9,6 +9,7 @@ Name variance based on [RestSharp](https://github.com/restsharp/RestSharp/blob/m
 
 ## Changes from Official
 
+* Windows Phone support out-of-the-box
 * Name variant support when deserializing. This uses the same logic from RestSharp.
 	- `last_name` => `LastName`, `lastName`, etc.
 * Root element support. This allows you to specify the first element in the result JSON to use as a starting point for the parser, preventing you from having to create container classes.

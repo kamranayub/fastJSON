@@ -78,6 +78,9 @@
     <Compile Include="..\fastJSON\SafeDictionary.cs">
       <Link>SafeDictionary.cs</Link>
     </Compile>
+    <Compile Include="..\fastJSON\StringExtensions.cs">
+      <Link>StringExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
