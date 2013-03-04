@@ -1,9 +1,10 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <id>$id$</id>
+    <id>$id$-KAyub</id>
+    <title>$id$-KAyub</title>
     <version>$version$</version>
-    <authors>$author$, Kamran Ayub</authors>
+    <authors>$author$</authors>
     <owners>$author$</owners>
     <projectUrl>http://github.com/kamranayub/fastJSON</projectUrl>
     <licenseUrl>http://www.codeproject.com/info/cpol10.aspx</licenseUrl>
