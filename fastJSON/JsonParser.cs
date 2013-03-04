@@ -33,17 +33,24 @@ namespace fastJSON
         Token lookAheadToken = Token.None;
         int index;
         bool _ignorecase = false;
+        string _rootElement = null;
 
-
-        internal JsonParser(string json, bool ignorecase)
+        internal JsonParser(string json, bool ignorecase, string rootElement)
         {
             this.json = json.ToCharArray();
             _ignorecase = ignorecase;
+            _rootElement = rootElement;
         }
 
         public object Decode()
         {
-            return ParseValue();
+            var o = ParseValue();
+
+            if (o is IDictionary && _rootElement != null) {
+                return ((IDictionary<string, object>)o)[_rootElement];
+            }
+
+            return o;
         }
 
         private Dictionary<string, object> ParseObject()

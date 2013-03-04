@@ -90,6 +90,7 @@
     <Compile Include="JsonParser.cs" />
     <Compile Include="Reflection.cs" />
     <Compile Include="SafeDictionary.cs" />
+    <Compile Include="StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

@@ -6,6 +6,7 @@ using System.Data;
 #endif
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 
@@ -44,6 +45,10 @@ namespace fastJSON
         /// ** work in progress
         /// </summary>
         public bool IgnoreCaseOnDeserialize = false;
+        /// <summary>
+        /// When deserializing to an object, attempts to match JSON keys using different variations on the key (PascalCased, camelCased, etc.)
+        /// </summary>
+        public bool MatchNameVariantsOnDeserialize = false;
         /// <summary>
         /// Anonymous types have read only properties 
         /// </summary>
@@ -115,24 +120,24 @@ namespace fastJSON
             return new JSONSerializer(_params).ConvertToJSON(obj);
         }
 
-        public object Parse(string json)
+        public object Parse(string json, string rootElement = null)
         {
             _params = Parameters;
             Reflection.Instance.ShowReadOnlyProperties = _params.ShowReadOnlyProperties;
-            return new JsonParser(json, _params.IgnoreCaseOnDeserialize).Decode();
+            return new JsonParser(json, _params.IgnoreCaseOnDeserialize, rootElement).Decode();
         }
 
-        public T ToObject<T>(string json)
+        public T ToObject<T>(string json, string rootElement = null)
         {
-            return (T)ToObject(json, typeof(T));
+            return (T)ToObject(json, typeof(T), rootElement);
         }
 
-        public object ToObject(string json)
+        public object ToObject(string json, string rootElement = null)
         {
-            return ToObject(json, null);
+            return ToObject(json, null, rootElement);
         }
 
-        public object ToObject(string json, Type type)
+        public object ToObject(string json, Type type, string rootElement = null)
         {
             _params = Parameters;
             _params.FixValues();
@@ -144,7 +149,7 @@ namespace fastJSON
                 _params.UsingGlobalTypes = false;
             _usingglobals = _params.UsingGlobalTypes;
 
-            object o = new JsonParser(json, Parameters.IgnoreCaseOnDeserialize).Decode();
+            object o = new JsonParser(json, Parameters.IgnoreCaseOnDeserialize, rootElement).Decode();
             if (o == null)
                 return null;
 
@@ -185,12 +190,12 @@ namespace fastJSON
             return Formatter.PrettyPrint(input);
         }
 
-        public object FillObject(object input, string json)
+        public object FillObject(object input, string json, string rootElement = null)
         {
             _params = Parameters;
             _params.FixValues();
             Reflection.Instance.ShowReadOnlyProperties = _params.ShowReadOnlyProperties;
-            Dictionary<string, object> ht = new JsonParser(json, Parameters.IgnoreCaseOnDeserialize).Decode() as Dictionary<string, object>;
+            Dictionary<string, object> ht = new JsonParser(json, Parameters.IgnoreCaseOnDeserialize, rootElement).Decode() as Dictionary<string, object>;
             if (ht == null) return null;
             return ParseDictionary(ht, null, input.GetType(), input);
         }
@@ -466,9 +471,20 @@ namespace fastJSON
                     ProcessMap(o, props, (Dictionary<string, object>)d[name]);
                     continue;
                 }
-                myPropInfo pi;
-                if (props.TryGetValue(name, out pi) == false)
-                    continue;
+
+                var pi = new myPropInfo();
+                if (_params.MatchNameVariantsOnDeserialize) {
+                    var nameVariants = name.GetNameVariants(CultureInfo.InvariantCulture);
+
+
+                    if (!nameVariants.Any(v => props.TryGetValue(v, out pi)))
+                        continue;
+                }
+                else {
+                    if (props.TryGetValue(name, out pi) == false)
+                        continue;                    
+                }
+
                 if (pi.filled && pi.CanWrite)
                 {
                     object v = d[name];
