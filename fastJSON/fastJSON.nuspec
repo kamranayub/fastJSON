@@ -3,9 +3,10 @@
   <metadata>
     <id>$id$</id>
     <version>$version$</version>
-    <authors>Kamran Ayub</authors>
+    <authors>$author$, Kamran Ayub</authors>
     <owners>$author$</owners>
     <projectUrl>http://github.com/kamranayub/fastJSON</projectUrl>
+    <licenseUrl>http://www.codeproject.com/info/cpol10.aspx</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>
