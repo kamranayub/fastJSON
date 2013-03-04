@@ -1,15 +1,23 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <id>fastJSON</id>
-    <version>2.0.4</version>
-    <authors>Mehdi Gholam</authors>
-    <owners>Mehdi Gholam</owners>
-    <projectUrl>http://fastjson.codeplex.com/</projectUrl>
+    <id>$id$</id>
+    <version>$version$</version>
+    <authors>Kamran Ayub</authors>
+    <owners>$author$</owners>
+    <projectUrl>http://github.com/kamranayub/fastJSON</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Smallest, fastest polymorphic JSON serializer</description>
-    <releaseNotes />
+    <description>$description$</description>
+    <releaseNotes>
+      * Packaged up latest version for Nuget
+      * Added name variance support
+      * Added "rootElement" support
+    </releaseNotes>
     <copyright>Copyright 2012 Mehdi Gholam</copyright>
-    <tags>JSON serializer C# .NET</tags>
+    <tags>JSON serializer C# .NET</tags>    
   </metadata>
+  <files>
+    <file src="..\bin\sl4\*.dll" target="lib\sl4" />
+    <file src="..\bin\wp71\*.dll" target="lib\wp71" />
+  </files>
 </package> 
