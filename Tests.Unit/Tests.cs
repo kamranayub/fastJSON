@@ -570,14 +570,19 @@ namespace UnitTests
         }
 
         [Test]
-        public static void Speed_Test_Deserialize()
-        {
-            Console.Write("fastjson deserialize");
+        public static void Speed_Test_Deserialize() {
+
+            // Options, uncomment to test speed impact
+            // JSON.Instance.Parameters.MatchNameVariantsOnDeserialize = true;
+            // JSON.Instance.Parameters.NameVariantFlags = Variants.PascalCase | Variants.Lowercase | Variants.CamelCase;
+
+            Console.WriteLine("fastJSON Deserialization Times:");
             colclass c = CreateObject();
             double t = 0;
+            var sw = new System.Diagnostics.Stopwatch();
             for (int pp = 0; pp < tcount; pp++)
             {
-                DateTime st = DateTime.Now;
+                sw.Restart();
                 colclass deserializedStore;
                 string jsonText = fastJSON.JSON.Instance.ToJSON(c);
                 //Console.WriteLine(" size = " + jsonText.Length);
@@ -585,8 +590,9 @@ namespace UnitTests
                 {
                     deserializedStore = (colclass)fastJSON.JSON.Instance.ToObject(jsonText);
                 }
-                t += DateTime.Now.Subtract(st).TotalMilliseconds;
-                Console.Write("\t" + DateTime.Now.Subtract(st).TotalMilliseconds);
+                sw.Stop();
+                t += sw.ElapsedMilliseconds;
+                Console.WriteLine("\tTest {0} @ {1} iters: " + sw.Elapsed, pp + 1, count);
             }
             Console.WriteLine("\tAVG = " + t / tcount);
         }

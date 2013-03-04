@@ -18,7 +18,9 @@ Name variance based on [RestSharp](https://github.com/restsharp/RestSharp/blob/m
 
 ## Name Variance
 
-	fastJSON.JSONParameters.MatchNameVariantsOnDeserialize = true;
+	// Defaults
+	fastJSON.JSONParameters.MatchNameVariantsOnDeserialize = false;
+	fastJSON.JSONParameters.EnabledNameVariantFlags = NameVariants.PascalCase;
 
 If your service/API returns a JSON response like this:
 
@@ -44,6 +46,12 @@ However, with the name variance feature, it will properly discover and match up 
 overhead, so you can enable it like this:
 
 	fastJSON.JSONParameters.MatchNameVariantsOnDeserialize = true;
+
+Since each variant has a perf impact, you can enable/disable them when you know what response you expect back:
+
+	fastJSON.JSONParameters.EnabledNameVariantFlags = NameVariants.PascalCase;
+
+With all matches enabled, it can add 2-3x the amount of time to deserialize an object.
 
 ## License
 

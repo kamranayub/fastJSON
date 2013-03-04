@@ -153,39 +153,98 @@ namespace fastJSON {
         /// </summary>
         /// <param name="name">String to convert</param>
         /// <param name="culture">The culture to use for conversion</param>
+        /// <param name="options">The variants to try and match against (less is faster)</param>
         /// <returns>IEnumerable&lt;string&gt;</returns>
-        public static IEnumerable<string> GetNameVariants(this string name, CultureInfo culture) {
+        public static IEnumerable<string> GetNameVariants(this string name, CultureInfo culture, NameVariants options) {
             if (String.IsNullOrEmpty(name))
                 yield break;
 
             yield return name;
 
             // try pascal cased name
-            yield return name.ToPascalCase(true, culture);
+            if ((options & NameVariants.PascalCase) == NameVariants.PascalCase)
+                yield return name.ToPascalCase(true, culture);
 
             // try camel cased name
-            yield return name.ToCamelCase(culture);
+            if ((options & NameVariants.CamelCase) == NameVariants.CamelCase)
+                yield return name.ToCamelCase(culture);
 
             // try lower cased name
-            yield return name.ToLower(culture);
+            if ((options & NameVariants.Lowercase) == NameVariants.Lowercase)
+                yield return name.ToLower(culture);
 
             // try name with underscores
-            yield return name.AddUnderscores();
+            if ((options & NameVariants.WithUnderscores) == NameVariants.WithUnderscores)
+                yield return name.AddUnderscores();
 
             // try name with underscores with lower case
-            yield return name.AddUnderscores().ToLower(culture);
+            if ((options & NameVariants.WithUnderscoresLowercase) == NameVariants.WithUnderscoresLowercase)
+                yield return name.AddUnderscores().ToLower(culture);
 
             // try name with dashes
-            yield return name.AddDashes();
+            if ((options & NameVariants.Dashes) == NameVariants.Dashes)
+                yield return name.AddDashes();
 
             // try name with dashes with lower case
-            yield return name.AddDashes().ToLower(culture);
+            if ((options & NameVariants.DashesLowercase) == NameVariants.DashesLowercase)
+                yield return name.AddDashes().ToLower(culture);
 
             // try name with underscore prefix
-            yield return name.AddUnderscorePrefix();
+            if ((options & NameVariants.UnderscorePrefix) == NameVariants.UnderscorePrefix)
+                yield return name.AddUnderscorePrefix();
 
             // try name with underscore prefix, using camel case
-            yield return name.ToCamelCase(culture).AddUnderscorePrefix();
+            if ((options & NameVariants.UnderscorePrefixCamelCase) == NameVariants.UnderscorePrefixCamelCase)
+                yield return name.ToCamelCase(culture).AddUnderscorePrefix();
         }
+    }
+
+    [Flags]
+    public enum NameVariants {
+
+        /// <summary>
+        /// PascalCased word
+        /// </summary>
+        PascalCase,
+
+        /// <summary>
+        /// camelCased word
+        /// </summary>
+        CamelCase,
+
+        /// <summary>
+        /// lowercase
+        /// </summary>
+        Lowercase,
+
+        /// <summary>
+        /// With_Underscores
+        /// </summary>
+        WithUnderscores,
+
+        /// <summary>
+        /// with_underscores
+        /// </summary>
+        WithUnderscoresLowercase,
+
+        /// <summary>
+        /// With-Dashes
+        /// </summary>
+        Dashes,
+
+        /// <summary>
+        /// with-dashes
+        /// </summary>
+        DashesLowercase,
+
+        /// <summary>
+        /// _UnderscorePrefix
+        /// </summary>
+        UnderscorePrefix,
+
+        /// <summary>
+        /// _underscorePrefix
+        /// </summary>
+        UnderscorePrefixCamelCase
     }
 }

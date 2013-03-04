@@ -50,6 +50,10 @@ namespace fastJSON
         /// </summary>
         public bool MatchNameVariantsOnDeserialize = false;
         /// <summary>
+        /// The name variations to match on (default: PascalCase)
+        /// </summary>
+        public NameVariants EnabledNameNameVariantFlags = NameVariants.PascalCase;
+        /// <summary>
         /// Anonymous types have read only properties 
         /// </summary>
         public bool EnableAnonymousTypes = false;
@@ -472,12 +476,9 @@ namespace fastJSON
                     continue;
                 }
 
-                var pi = new myPropInfo();
+                myPropInfo pi = new myPropInfo();
                 if (_params.MatchNameVariantsOnDeserialize) {
-                    var nameVariants = name.GetNameVariants(CultureInfo.InvariantCulture);
-
-
-                    if (!nameVariants.Any(v => props.TryGetValue(v, out pi)))
+                    if (!name.GetNameVariants(CultureInfo.InvariantCulture, _params.EnabledNameNameVariantFlags).Any(v => props.TryGetValue(v, out pi)))
                         continue;
                 }
                 else {
